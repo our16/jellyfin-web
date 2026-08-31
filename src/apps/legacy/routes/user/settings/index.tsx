@@ -255,7 +255,7 @@ const UserSettingsPage: FC = () => {
 
                         {isLoggedInUser && user.Policy?.IsAdministrator && (
                             <LinkButton
-                                href='#/dashboard'
+                                onClick={() => { window.location.hash = '#/dashboard'; }}
                                 className='lnkDashboard listItem-border'
                                 style={{
                                     display: 'block',
@@ -287,7 +287,7 @@ const UserSettingsPage: FC = () => {
                             </h2>
 
                             <LinkButton
-                                href='#/dashboard'
+                                onClick={() => { window.location.hash = '#/dashboard'; }}
                                 className='listItem-border'
                                 style={{
                                     display: 'block',

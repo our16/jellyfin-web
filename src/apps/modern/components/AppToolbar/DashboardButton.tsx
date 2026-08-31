@@ -1,14 +1,17 @@
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import React, { type FC } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useCallback, type FC } from 'react';
 
 import { useApi } from 'hooks/useApi';
 import globalize from 'lib/globalize';
 
 const DashboardButton: FC = () => {
     const { user } = useApi();
+
+    const onClick = useCallback(() => {
+        window.location.assign('#/dashboard');
+    }, []);
 
     if (!user?.Policy?.IsAdministrator) return null;
 
@@ -18,8 +21,7 @@ const DashboardButton: FC = () => {
                 size='large'
                 aria-label={globalize.translate('TabDashboard')}
                 color='inherit'
-                component={Link}
-                to='/dashboard'
+                onClick={onClick}
             >
                 <DashboardIcon />
             </IconButton>
