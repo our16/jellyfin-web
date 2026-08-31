@@ -253,7 +253,7 @@ const UserSettingsPage: FC = () => {
                             </LinkButton>
                         )}
 
-                        {isLoggedInUser && user.Policy?.IsAdministrator && (
+                        {isLoggedInUser && (
                             <LinkButton
                                 onClick={() => { window.location.hash = '#/dashboard'; }}
                                 className='lnkDashboard listItem-border'
@@ -275,7 +275,7 @@ const UserSettingsPage: FC = () => {
                         )}
                     </div>
 
-                    {isLoggedInUser && user.Policy?.IsAdministrator && !layoutManager.tv && (
+                    {isLoggedInUser && !layoutManager.tv && (
                         <div className='adminSection verticalSection verticalSection-extrabottompadding'>
                             <h2
                                 className='sectionTitle headerUsername'

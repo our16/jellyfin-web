@@ -13,7 +13,7 @@ const DashboardButton: FC = () => {
         window.location.assign('#/dashboard');
     }, []);
 
-    if (!user?.Policy?.IsAdministrator) return null;
+    if (!user) return null;
 
     return (
         <Tooltip title={globalize.translate('TabDashboard')}>

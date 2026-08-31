@@ -69,7 +69,7 @@ function RootAppLayout() {
             <Backdrop />
             <AppHeader isHidden={layoutManager.modern || isNewLayoutPath} />
 
-            {user?.Policy?.IsAdministrator && !layoutManager.modern && !isDashboard && !isNewLayoutPath && (
+            {user && !layoutManager.modern && !isDashboard && !isNewLayoutPath && (
                 <Tooltip title={globalize.translate('TabDashboard')}>
                     <IconButton
                         size='large'
