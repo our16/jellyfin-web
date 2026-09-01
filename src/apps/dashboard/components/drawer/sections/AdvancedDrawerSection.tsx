@@ -1,6 +1,7 @@
 import Article from '@mui/icons-material/Article';
 import Backup from '@mui/icons-material/Backup';
 import Lan from '@mui/icons-material/Lan';
+import SystemUpdate from '@mui/icons-material/SystemUpdate';
 import Schedule from '@mui/icons-material/Schedule';
 import VpnKey from '@mui/icons-material/VpnKey';
 import List from '@mui/material/List';
@@ -37,6 +38,14 @@ const AdvancedDrawerSection = () => {
                         <VpnKey />
                     </ListItemIcon>
                     <ListItemText primary={globalize.translate('HeaderApiKeys')} />
+                </ListItemLink>
+            </ListItem>
+            <ListItem disablePadding>
+                <ListItemLink to='/dashboard/appupdates'>
+                    <ListItemIcon>
+                        <SystemUpdate />
+                    </ListItemIcon>
+                    <ListItemText primary={globalize.translate('HeaderAppUpdates')} />
                 </ListItemLink>
             </ListItem>
             <ListItem disablePadding>
