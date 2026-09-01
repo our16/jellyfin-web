@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import AddIcon from '@mui/icons-material/Add';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import Page from 'components/Page';
 import globalize from 'lib/globalize';
 import React, { useCallback, useState } from 'react';
@@ -14,11 +15,13 @@ import RepositoryListItem from 'apps/dashboard/features/plugins/components/Repos
 import type { RepositoryInfo } from '@jellyfin/sdk/lib/generated-client/models/repository-info';
 import { useSetRepositories } from 'apps/dashboard/features/plugins/api/useSetRepositories';
 import NewRepositoryForm from 'apps/dashboard/features/plugins/components/NewRepositoryForm';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const Component = () => {
     const { data: repositories, isPending, isError } = useRepositories();
     const [ isRepositoryFormOpen, setIsRepositoryFormOpen ] = useState(false);
     const setRepositories = useSetRepositories();
+    const queryClient = useQueryClient();
 
     const onDelete = useCallback((repository: RepositoryInfo) => {
         if (repositories) {
@@ -73,13 +76,22 @@ export const Component = () => {
                     <Stack spacing={3}>
                         <Typography variant='h1'>{globalize.translate('TabRepositories')}</Typography>
 
-                        <Button
-                            sx={{ alignSelf: 'flex-start' }}
-                            startIcon={<AddIcon />}
-                            onClick={openRepositoryForm}
-                        >
-                            {globalize.translate('HeaderNewRepository')}
-                        </Button>
+                        <Stack direction='row' spacing={1}>
+                            <Button
+                                sx={{ alignSelf: 'flex-start' }}
+                                startIcon={<RefreshIcon />}
+                                onClick={() => queryClient.invalidateQueries()}
+                            >
+                                {globalize.translate('Refresh')}
+                            </Button>
+                            <Button
+                                sx={{ alignSelf: 'flex-start' }}
+                                startIcon={<AddIcon />}
+                                onClick={openRepositoryForm}
+                            >
+                                {globalize.translate('HeaderNewRepository')}
+                            </Button>
+                        </Stack>
 
                         {repositories.length > 0 ? (
                             <List sx={{ bgcolor: 'background.paper' }}>
