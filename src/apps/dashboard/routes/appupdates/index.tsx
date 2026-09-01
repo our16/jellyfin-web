@@ -18,10 +18,12 @@ import SaveIcon from '@mui/icons-material/Save';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DownloadDoneIcon from '@mui/icons-material/DownloadDone';
 import useTheme from '@mui/material/styles/useTheme';
-import { useMaterialReactTable } from 'material-react-table';
+import { useMaterialReactTable, MaterialReactTable } from 'material-react-table';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import Alert from '@mui/material/Alert';
 
-import TablePage, { DEFAULT_TABLE_OPTIONS } from 'apps/dashboard/components/table/TablePage';
+import { DEFAULT_TABLE_OPTIONS } from 'apps/dashboard/components/table/TablePage';
+import Page from 'components/Page';
 import { useApi } from 'hooks/useApi';
 import globalize from 'lib/globalize';
 import ConfirmDialog from 'components/ConfirmDialog';
@@ -248,129 +250,141 @@ export const Component = () => {
                 onCancel={() => { setReleaseToDelete(null); setIsConfirmDeleteOpen(false); }}
             />
 
-            <TablePage
+            <Page
                 id='appUpdatesPage'
                 title={globalize.translate('HeaderAppUpdates')}
                 className='mainAnimatedPage type-interior'
-                table={table}
-                isError={isError}
-                errorMessage={globalize.translate('AppUpdatesLoadError')}
             >
-                <Stack spacing={2} sx={{ mt: 2, px: 2, pb: 3 }}>
-                    <Paper
-                        elevation={0}
-                        sx={{
-                            p: 2.5,
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 2,
-                            borderRadius: '12px',
-                            border: '1px solid',
-                            borderColor: 'divider',
-                            background: `linear-gradient(135deg, ${theme.palette.primary.main}08, ${theme.palette.primary.main}03)`
-                        }}
-                    >
-                        <Box sx={{ p: 1.5, borderRadius: '10px', bgcolor: 'primary.main', color: 'primary.contrastText', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <DownloadDoneIcon />
-                        </Box>
-                        <Box>
-                            <Typography variant='h4' fontWeight={700}>{releases.length}</Typography>
-                            <Typography variant='body2' color='text.secondary'>{globalize.translate('HeaderAppUpdates')}</Typography>
-                        </Box>
-                        <Box sx={{ flex: 1 }} />
-                        <Box sx={{ p: 1.5, borderRadius: '10px', bgcolor: 'success.main', color: 'success.contrastText', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <FolderIcon />
-                        </Box>
-                        <Box sx={{ minWidth: 0 }}>
-                            <Typography variant='body2' fontWeight={600} noWrap>{apkDirectory || 'Default'}</Typography>
-                            <Typography variant='body2' color='text.secondary'>APK Storage</Typography>
-                        </Box>
-                        {isDirectoryDefault && <Chip label='Default' size='small' variant='outlined' />}
-                    </Paper>
+                <Box
+                    className='content-primary'
+                    sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}
+                >
+                    <Stack spacing={2} sx={{ mb: 2 }}>
+                        <Typography variant='h1'>
+                            {globalize.translate('HeaderAppUpdates')}
+                        </Typography>
 
-                    <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-                        <Card elevation={0} sx={{ flex: 1, borderRadius: '12px', border: '1px solid', borderColor: 'divider' }}>
-                            <CardHeader
-                                avatar={<FolderIcon color='primary' />}
-                                title={globalize.translate('HeaderApkDirectory')}
-                                subheader={globalize.translate('LabelApkDirectoryHelp')}
-                                titleTypographyProps={{ variant: 'subtitle1', fontWeight: 600 }}
-                                subheaderTypographyProps={{ variant: 'body2' }}
-                            />
-                            <Divider />
-                            <CardContent>
-                                <Stack direction='row' spacing={1} alignItems='center'>
-                                    <TextField
-                                        fullWidth
-                                        size='small'
-                                        value={apkDirectory}
-                                        onChange={(e) => setApkDirectory(e.target.value)}
-                                        placeholder={globalize.translate('LabelApkDirectoryPlaceholder')}
-                                        variant='outlined'
-                                        sx={{ '& .MuiOutlinedInput-root': { borderRadius: '8px' } }}
-                                    />
-                                    <Button
-                                        variant='contained'
-                                        startIcon={<SaveIcon />}
-                                        onClick={handleSaveDirectory}
-                                        sx={{ minWidth: 100, borderRadius: '8px', textTransform: 'none' }}
-                                    >
-                                        {globalize.translate('Save')}
-                                    </Button>
-                                </Stack>
-                            </CardContent>
-                        </Card>
+                        <Paper
+                            elevation={0}
+                            sx={{
+                                p: 2.5,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 2,
+                                borderRadius: '12px',
+                                border: '1px solid',
+                                borderColor: 'divider',
+                                background: `linear-gradient(135deg, ${theme.palette.primary.main}08, ${theme.palette.primary.main}03)`
+                            }}
+                        >
+                            <Box sx={{ p: 1.5, borderRadius: '10px', bgcolor: 'primary.main', color: 'primary.contrastText', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <DownloadDoneIcon />
+                            </Box>
+                            <Box>
+                                <Typography variant='h4' fontWeight={700}>{releases.length}</Typography>
+                                <Typography variant='body2' color='text.secondary'>{globalize.translate('HeaderAppUpdates')}</Typography>
+                            </Box>
+                            <Box sx={{ flex: 1 }} />
+                            <Box sx={{ p: 1.5, borderRadius: '10px', bgcolor: 'success.main', color: 'success.contrastText', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <FolderIcon />
+                            </Box>
+                            <Box sx={{ minWidth: 0 }}>
+                                <Typography variant='body2' fontWeight={600} noWrap>{apkDirectory || 'Default'}</Typography>
+                                <Typography variant='body2' color='text.secondary'>APK Storage</Typography>
+                            </Box>
+                            {isDirectoryDefault && <Chip label='Default' size='small' variant='outlined' />}
+                        </Paper>
 
-                        <Card elevation={0} sx={{ flex: 1, borderRadius: '12px', border: '1px solid', borderColor: 'divider' }}>
-                            <CardHeader
-                                avatar={<CloudUploadIcon color='primary' />}
-                                title={globalize.translate('HeaderUploadRelease')}
-                                subheader='Upload a new APK version to the server'
-                                titleTypographyProps={{ variant: 'subtitle1', fontWeight: 600 }}
-                                subheaderTypographyProps={{ variant: 'body2' }}
-                            />
-                            <Divider />
-                            <CardContent>
-                                <Stack direction='row' spacing={1} alignItems='center'>
-                                    <TextField
-                                        size='small'
-                                        value={uploadVersion}
-                                        onChange={(e) => setUploadVersion(e.target.value)}
-                                        placeholder='1.0.0'
-                                        label={globalize.translate('LabelVersion')}
-                                        variant='outlined'
-                                        sx={{ width: 130, '& .MuiOutlinedInput-root': { borderRadius: '8px' } }}
-                                    />
-                                    <TextField
-                                        size='small'
-                                        select
-                                        value={uploadChannel}
-                                        onChange={(e) => setUploadChannel(e.target.value)}
-                                        label={globalize.translate('LabelChannel')}
-                                        variant='outlined'
-                                        sx={{ width: 130, '& .MuiOutlinedInput-root': { borderRadius: '8px' } }}
-                                        slotProps={{ select: { native: true } }}
-                                    >
-                                        <option value='stable'>Stable</option>
-                                        <option value='beta'>Beta</option>
-                                        <option value='alpha'>Alpha</option>
-                                    </TextField>
-                                    <Button
-                                        variant='contained'
-                                        color='secondary'
-                                        startIcon={<UploadIcon />}
-                                        onClick={handleUpload}
-                                        disabled={isUploading || !uploadVersion}
-                                        sx={{ borderRadius: '8px', textTransform: 'none', whiteSpace: 'nowrap' }}
-                                    >
-                                        {isUploading ? globalize.translate('LabelUploading') : globalize.translate('HeaderUploadApk')}
-                                    </Button>
-                                </Stack>
-                            </CardContent>
-                        </Card>
+                        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+                            <Card elevation={0} sx={{ flex: 1, borderRadius: '12px', border: '1px solid', borderColor: 'divider' }}>
+                                <CardHeader
+                                    avatar={<FolderIcon color='primary' />}
+                                    title={globalize.translate('HeaderApkDirectory')}
+                                    subheader={globalize.translate('LabelApkDirectoryHelp')}
+                                    titleTypographyProps={{ variant: 'subtitle1', fontWeight: 600 }}
+                                    subheaderTypographyProps={{ variant: 'body2' }}
+                                />
+                                <Divider />
+                                <CardContent>
+                                    <Stack direction='row' spacing={1} alignItems='center'>
+                                        <TextField
+                                            fullWidth
+                                            size='small'
+                                            value={apkDirectory}
+                                            onChange={(e) => setApkDirectory(e.target.value)}
+                                            placeholder={globalize.translate('LabelApkDirectoryPlaceholder')}
+                                            variant='outlined'
+                                            sx={{ '& .MuiOutlinedInput-root': { borderRadius: '8px' } }}
+                                        />
+                                        <Button
+                                            variant='contained'
+                                            startIcon={<SaveIcon />}
+                                            onClick={handleSaveDirectory}
+                                            sx={{ minWidth: 100, borderRadius: '8px', textTransform: 'none' }}
+                                        >
+                                            {globalize.translate('Save')}
+                                        </Button>
+                                    </Stack>
+                                </CardContent>
+                            </Card>
+
+                            <Card elevation={0} sx={{ flex: 1, borderRadius: '12px', border: '1px solid', borderColor: 'divider' }}>
+                                <CardHeader
+                                    avatar={<CloudUploadIcon color='primary' />}
+                                    title={globalize.translate('HeaderUploadRelease')}
+                                    subheader='Upload a new APK version to the server'
+                                    titleTypographyProps={{ variant: 'subtitle1', fontWeight: 600 }}
+                                    subheaderTypographyProps={{ variant: 'body2' }}
+                                />
+                                <Divider />
+                                <CardContent>
+                                    <Stack direction='row' spacing={1} alignItems='center'>
+                                        <TextField
+                                            size='small'
+                                            value={uploadVersion}
+                                            onChange={(e) => setUploadVersion(e.target.value)}
+                                            placeholder='1.0.0'
+                                            label={globalize.translate('LabelVersion')}
+                                            variant='outlined'
+                                            sx={{ width: 130, '& .MuiOutlinedInput-root': { borderRadius: '8px' } }}
+                                        />
+                                        <TextField
+                                            size='small'
+                                            select
+                                            value={uploadChannel}
+                                            onChange={(e) => setUploadChannel(e.target.value)}
+                                            label={globalize.translate('LabelChannel')}
+                                            variant='outlined'
+                                            sx={{ width: 130, '& .MuiOutlinedInput-root': { borderRadius: '8px' } }}
+                                            slotProps={{ select: { native: true } }}
+                                        >
+                                            <option value='stable'>Stable</option>
+                                            <option value='beta'>Beta</option>
+                                            <option value='alpha'>Alpha</option>
+                                        </TextField>
+                                        <Button
+                                            variant='contained'
+                                            color='secondary'
+                                            startIcon={<UploadIcon />}
+                                            onClick={handleUpload}
+                                            disabled={isUploading || !uploadVersion}
+                                            sx={{ borderRadius: '8px', textTransform: 'none', whiteSpace: 'nowrap' }}
+                                        >
+                                            {isUploading ? globalize.translate('LabelUploading') : globalize.translate('HeaderUploadApk')}
+                                        </Button>
+                                    </Stack>
+                                </CardContent>
+                            </Card>
+                        </Stack>
                     </Stack>
-                </Stack>
-            </TablePage>
+
+                    {isError ? (
+                        <Alert severity='error'>{globalize.translate('AppUpdatesLoadError')}</Alert>
+                    ) : (
+                        <MaterialReactTable table={table} />
+                    )}
+                </Box>
+            </Page>
         </>
     );
 };
